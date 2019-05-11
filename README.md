@@ -66,7 +66,3 @@ oc adm policy add-cluster-role-to-user cluster-admin <username>
 ```
 Use this username and password to login to the webconsole
 
-## Authors
-
-* **Daniel Wind** 
-
