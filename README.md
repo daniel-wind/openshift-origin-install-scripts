@@ -18,9 +18,9 @@ On the workstation create 3 vms with the minimal requirements:
 
 Install minimal Centos 7
 Hostnames:
-master.lan
-infra.lan
-compute.lan
+- master.lan
+- infra.lan
+- compute.lan
 
 Connect to the created virtual nat network.
 
