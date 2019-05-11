@@ -7,15 +7,14 @@ sudo yum -y update
 sudo yum -y install centos-release-openshift-origin39 wget git net-tools \
     bind-utils yum-utils iptables-services bridge-utils bash-completion \
     kexec-tools sos psacct vim git mlocate
-# create .ssh folder in /root. Update the path if you plan to use a non-root
-# user with Ansible.
+# create .ssh folder in /root. 
 mkdir -p /root/.ssh
 # create passwordless ssh key for root. Update path if you're running a
 # non-root user.
 ssh-keygen -t rsa \
     -f /root/.ssh/id_rsa -N ''
 
-
+# Install docker and make the second disk docker storage.
 yum -y install docker-1.13.1
 cat > /etc/sysconfig/docker-storage-setup <<EOF
 DEVS=/dev/vdb
@@ -37,17 +36,20 @@ sudo yum -y install \
     https://cbs.centos.org/kojifiles/packages/ansible/2.4.3.0/1.el7/noarch/ansible-2.4.3.0-1.el7.noarch.rpm
 sudo yum -y install \
     https://cbs.centos.org/kojifiles/packages/ansible/2.4.3.0/1.el7/noarch/ansible-doc-2.4.3.0-1.el7.noarch.rpm
-# Reboot system to apply any kernel updates
+
+# Edit the ansible config to accepts keys and point to the inventory file
 sed -i 's/#host_key_checking = False/host_key_checking = False/' /etc/ansible/ansible.cfg
 sed -i 's/#inventory      = \/etc\/ansible\/hosts/inventory      = \/root\/inventory/' /etc/ansible/ansible.cfg
 
+# If we are on the master we want to install the openshift-ansible RPM.
 if [[ $(hostname) == "master"* ]]
 then
   yum -y install openshift-ansible
 fi
+# Do a ssh-copy-id to all nodes in the openshift set with the default password redhat.
 for node in master infra compute; do
   sshpass -p "redhat" ssh-copy-id -o StrictHostKeyChecking=no root@${node}
 done
 
-
+# Reboot system to apply any kernel updates
 sudo reboot
