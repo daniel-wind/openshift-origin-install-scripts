@@ -1,6 +1,6 @@
-# OKD 3.9.0 installation
+# Openshift Origin 3.9.0 installation
 
-OKD 3.9.0 install instructions build on the Linuxacademy scripts. This installation can be usefull to train for the Red Hat EX280 exam.
+Openshift Origin 3.9.0 install instructions build on the Linuxacademy scripts. This installation can be usefull to train for the Red Hat EX280 exam.
 
 ## Getting Started
 
