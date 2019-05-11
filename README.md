@@ -9,10 +9,10 @@ The used setup is a Centos 7 workstation with KVM.
 On the workstation create a KVM NAT network to be used with the vms.
 
 On the workstation create 3 vms with the minimal requirements:
-1 vcpu
-4gb memory
-40gb disk (os)
-10gb disk (docker storage)
+- 1 vcpu
+- 4gb memory
+- 40gb disk (os)
+- 10gb disk (docker storage)
 
 (The scripts assume that the second disk will be vdb, if not, change it in the install-openshift.sh script)
 
