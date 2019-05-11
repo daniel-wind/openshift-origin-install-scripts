@@ -1,88 +1,72 @@
 # Project Title
 
-One Paragraph of project description goes here
+OKD 3.9.0 install instructions build on the Linuxacademy scripts. This installation can be usefull to train for the Red Hat EX280 exam.
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+The used setup is a Centos 7 workstation with KVM.
+
+On the workstation create a KVM NAT network to be used with the vms.
+
+On the workstation create 3 vms with the minimal requirements:
+1 vcpu
+4gb memory
+40gb disk (os)
+10gb disk (docker storage)
+
+(The scripts assume that the second disk will be vdb, if not, change it in the install-openshift.sh script)
+
+Install minimal Centos 7
+Hostnames:
+master.lan
+infra.lan
+compute.lan
+
+Connect to the created virtual nat network.
+
+Use the root password redhat to use the scripts out-of-the-box or choose your own and edit the sshpass line in the install-openshift.sh script with your password of choise.
+Use auto partion and give static IP-addresses.
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
-
+DNS
+The 3 vms need to be in DNS, also the wildcard apps.lan, it has to point to the ip of the infra node.
+In my network there is a pi-hole which services DNS, in his hosts file the 3 vms are present. Also in /etc/dnsmasq.d on the pi-hole is a simple conf file 50-lan.conf
 ```
-Give examples
+address/apps.lan/x.x.x.x (infra node ip)
 ```
 
 ### Installing
+Before installing, make sure the hosts-inventory file is in the same directory as the scripts on the workstation.
+Steps to install:
 
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
+1. On the workstation run:
 ```
-Give the example
+bash 1-local-start-openshift-install.sh
 ```
-
-And repeat
-
+2. Om the 3 vms run:
 ```
-until finished
+bash install-openshift.sh
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
+After this, run the Ansible playbooks shipped with openshift-ansible (will be installed)
 ```
-Give an example
+ansible-playbook  /usr/share/ansible/openshift-ansible/playbooks/prerequisites.yml
+```
+And
+```
+ansible-playbook  /usr/share/ansible/openshift-ansible/playbooks/deploy_cluster.yml
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
-
+## After installing
+To login to https://master.lan:8443
+Create a htpasswd user: (on the master as root)
 ```
-Give an example
+htpasswd -b /etc/origin/master/htpasswd <username> <password> && \
+oc adm policy add-cluster-role-to-user cluster-admin <username> 
 ```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
-
-## Built With
-
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+Use this username and password to login to the webconsole
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
-## Acknowledgments
-
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* **Daniel Wind** 
 
