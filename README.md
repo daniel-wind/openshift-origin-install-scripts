@@ -33,7 +33,7 @@ DNS
 The 3 vms need to be in DNS, also the wildcard apps.lan, it has to point to the ip of the infra node.
 In my network there is a pi-hole which services DNS, in his hosts file the 3 vms are present. Also in /etc/dnsmasq.d on the pi-hole is a simple conf file 50-lan.conf. This makes sure that the apps.lan is a wildcard subdomain so that *.apps.lan resolves to the infra node.
 ```
-address/apps.lan/x.x.x.x (infra node ip)
+address=/apps.lan/x.x.x.x (infra node ip)
 ```
 
 ### Installing
