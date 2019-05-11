@@ -1,4 +1,4 @@
-# Project Title
+# OKD 3.9.0 installation
 
 OKD 3.9.0 install instructions build on the Linuxacademy scripts. This installation can be usefull to train for the Red Hat EX280 exam.
 
